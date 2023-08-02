@@ -115,7 +115,6 @@ void _print(const Head &H, const Tail &...T)
 void solve(void)
 {
     int n;
-    cin >> n;
 }
 
 signed main(void)
