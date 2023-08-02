@@ -116,7 +116,6 @@ void solve(void)
 {
     int n;
     cin >> n;
-    cout << n;
 }
 
 signed main(void)
