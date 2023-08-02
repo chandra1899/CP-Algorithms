@@ -3,7 +3,7 @@
 using namespace std;
 void solve(void)
 {
-    cout << "HELLO" << endl;
+    cout<<"HELLO"<<endl
 }
 signed main(void)
 {
