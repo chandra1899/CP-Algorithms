@@ -119,11 +119,20 @@ void _print(const Head &H, const Tail &...T)
 class MATH
 {
 public:
-    int Binexp(int __Base, int __Pow, int __Mod = MOD)
+    int __BinExpRec(int __Base, int __Pow, int __Mod = MOD)
     {
         // * APPLICATIONS :-
         // ^ Used To Calculate (__Base ^ __Pow) % __Mod in  O(logN) Time.
         // ^ When __Pow Is Very Big Than __Mod Then (__Base ^ __Pow) % __Mod = (__Base ^ (__Pow % Phi(__Mod))) % __Mod.
+        if (__Pow == 0)
+            return 1;
+        int __Res = __BinExpRec(__Base, __Pow / 2, __Mod);
+        if (__Pow & 1)
+            return ((__Res * __Res) % __Mod * __Base) % __Mod;
+        return (__Res * __Res) % __Mod;
+    }
+    int __BinExpItr(int __Base, int __Pow, int __Mod = MOD)
+    {
         int __Res = 1;
         while (__Pow)
         {
@@ -134,13 +143,55 @@ public:
         }
         return __Res;
     }
+    int __Gcd(int __Num1, int __Num2)
+    {
+        // ^ Extended Euclid Algorithm __Gcd(__Num1 , __Num2) = __Gcd(__Num2 , __Num1 % __Num2).
+        if (__Num2 == 0)
+            return __Num1;
+        return __Gcd(__Num2, __Num1 % __Num2);
+    }
+    int __Lcm(int __Num1, int __Num2)
+    {
+        // ^ Lcm And Hcf Property __Lcm * __Gcd = __Num1 * __Num2.
+        return __Num1 / __Gcd(__Num1, __Num2) * __Num2;
+    }
+    int __FastGcd(int __Num1, int __Num2)
+    {
+        // ^ __Gcd(2 * __Num1 , 2 * __Num2) = 2 * __Gcd(__Num1 , __Num2) , Both Even.
+        // ^ __Gcd(__Num1 , 2 * __Num2) = __Gcd(__Num1 , __Num2) , One Odd One Even.
+        // ^ __Gcd(__Num1 , __Num2) = __Gcd(__Num2 , __Num1 - __Num2) , Both Odd.
+        if (!__Num1 || !__Num2)
+            return __Num1 | __Num2;
+        unsigned shift = __builtin_ctz(__Num1 | __Num2);
+        __Num1 >>= __builtin_ctz(__Num1);
+        do
+        {
+            __Num2 >>= __builtin_ctz(__Num2);
+            if (__Num1 > __Num2)
+                swap(__Num1, __Num2);
+            __Num2 -= __Num1;
+        } while (__Num2);
+        return __Num1 << shift;
+    }
+    int __ExtendedGcd(int __Num1, int __Num2, int &x, int &y)
+    {
+        // ^ 
+        if (__Num2 == 0)
+        {
+            x = 1, y = 0;
+            return __Num1;
+        }
+        int x1, y1;
+        int __Gcd = __ExtendedGcd(__Num2, __Num1 % __Num2, x1, y1);
+        x = y1, y = x1 - y1 * (__Num1 / __Num2);
+        return __Gcd;
+    }
 };
 
 void solve(void)
 {
     MATH obj;
-    debug(obj.Binexp(8, 20, MOD));
-    debug(1152921504606846976 % MOD);
+    debug(obj.__FastGcd(32, 64));
 }
 
 signed main(void)
