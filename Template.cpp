@@ -1,8 +1,12 @@
 #include <bits/stdc++.h>
 #define int long long
 using namespace std;
+#define MOD 1000000007
 
-void __print(signed x) { cerr << x; }
+void __print(signed x)
+{
+    cerr << x;
+}
 void __print(long x) { cerr << x; }
 void __print(long long x) { cerr << x; }
 void __print(unsigned x) { cerr << x; }
@@ -112,10 +116,31 @@ void _print(const Head &H, const Tail &...T)
 #define debug(...)
 #endif
 
+class MATH
+{
+public:
+    int Binexp(int __Base, int __Pow, int __Mod = MOD)
+    {
+        // * APPLICATIONS :-
+        // ^ Used To Calculate (__Base ^ __Pow) % __Mod in  O(logN) Time.
+        // ^ When __Pow Is Very Big Than __Mod Then (__Base ^ __Pow) % __Mod = (__Base ^ (__Pow % Phi(__Mod))) % __Mod.
+        int __Res = 1;
+        while (__Pow)
+        {
+            if (__Pow & 1)
+                __Res = (__Res * __Base) % __Mod;
+            __Base = (__Base * __Base) % __Mod;
+            __Pow >>= 1;
+        }
+        return __Res;
+    }
+};
+
 void solve(void)
 {
-    int n;
-    int x = 2 * 4;
+    MATH obj;
+    debug(obj.Binexp(8, 20, MOD));
+    debug(1152921504606846976 % MOD);
 }
 
 signed main(void)
