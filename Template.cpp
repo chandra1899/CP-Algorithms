@@ -115,6 +115,7 @@ void _print(const Head &H, const Tail &...T)
 void solve(void)
 {
     int n;
+    int x = 2 * 4;
 }
 
 signed main(void)
