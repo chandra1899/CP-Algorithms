@@ -119,12 +119,12 @@ void _print(const Head &H, const Tail &...T)
 class Triplet
 {
 public:
-    int First = -1;
-    int Second = -1;
-    int Third = -1;
-    Triplet(int First, int Second, int Third)
+    int __First = -1;
+    int __Second = -1;
+    int __Third = -1;
+    Triplet(int __First, int __Second, int __Third)
     {
-        this->First = First, this->Second = Second, this->Third = Third;
+        this->__First = __First, this->__Second = __Second, this->__Third = __Third;
     }
     Triplet() {}
 };
@@ -210,73 +210,75 @@ public:
 
     Triplet __AnySolution(int __Num1, int __Num2, int __Const)
     {
-        Triplet Soln;
+        Triplet __Soln;
         // ^ Assuming The Eqn To be  __Num1 * X + __Num2 * Y = __Gcd(__Num1 , __Num2) Now ,
         // ^ Now Extending The Same Across __Const With Multiples Of __Gcd.
-        Soln.Third = __ExtendedGcd(abs(__Num1), abs(__Num2), Soln.First, Soln.Second);
-        if (__Const % Soln.Third)
+        __Soln.__Third = __ExtendedGcd(abs(__Num1), abs(__Num2), __Soln.__First, __Soln.__Second);
+        if (__Const % __Soln.__Third)
             return {-1, -1, -1};
-        Soln.First *= __Const / Soln.Third, Soln.Second *= __Const / Soln.Third;
+        __Soln.__First *= __Const / __Soln.__Third, __Soln.__Second *= __Const / __Soln.__Third;
         if (__Num1 < 0)
-            Soln.First = -Soln.First;
+            __Soln.__First = -__Soln.__First;
         if (__Num2 < 0)
-            Soln.Second = -Soln.Second;
-        return Soln;
+            __Soln.__Second = -__Soln.__Second;
+        return __Soln;
     }
 
-    void __ShiftSoln(int &x, int &y, int __Num1, int __Num2, int cnt)
+    void __ShiftSoln(int &x, int &y, int __Num1, int __Num2, int __cnt)
     {
-        x += cnt * __Num2;
-        y -= cnt * __Num1;
+        x += __cnt * __Num2;
+        y -= __cnt * __Num1;
     }
 
     int __AllSolutions(int __Num1, int __Num2, int __Const, int Minx, int Maxx, int Miny, int Maxy)
     {
         // ^ Each Time We Can Get A New Solution By Transforming X and Y as ,
         // ^ x1 = x + k * (__Num2/__Gcd) , y1 = y - k * (__Num1/__Gcd).
-        Triplet Soln;
-        Soln = __AnySolution(__Num1, __Num2, __Const);
-        if (Soln.First == -1 && Soln.Second == -1 && Soln.Third == -1)
+        Triplet __Soln;
+        __Soln = __AnySolution(__Num1, __Num2, __Const);
+        if (__Soln.__First == -1 && __Soln.__Second == -1 && __Soln.__Third == -1)
             return 0;
-        __Num1 /= Soln.Third;
-        __Num2 /= Soln.Third;
+        __Num1 /= __Soln.__Third;
+        __Num2 /= __Soln.__Third;
         int sign_a = __Num1 > 0 ? +1 : -1;
         int sign_b = __Num2 > 0 ? +1 : -1;
-        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Minx - Soln.First) / __Num2);
-        if (Soln.First < Minx)
-            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_b);
-        if (Soln.First > Maxx)
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, (Minx - __Soln.__First) / __Num2);
+        if (__Soln.__First < Minx)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, sign_b);
+        if (__Soln.__First > Maxx)
             return 0;
-        int Leftx = Soln.First;
-        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Maxx - Soln.First) / __Num2);
-        if (Soln.First > Maxx)
-            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_b);
-        int Rightx = Soln.First;
-        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Miny - Soln.Second) / __Num1);
-        if (Soln.Second < Miny)
-            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_a);
-        if (Soln.Second > Maxy)
+        int __Leftx = __Soln.__First;
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, (Maxx - __Soln.__First) / __Num2);
+        if (__Soln.__First > Maxx)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -sign_b);
+        int __Rightx = __Soln.__First;
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -(Miny - __Soln.__Second) / __Num1);
+        if (__Soln.__Second < Miny)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -sign_a);
+        if (__Soln.__Second > Maxy)
             return 0;
-        int Lefty = Soln.First;
-        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Maxy - Soln.Second) / __Num1);
-        if (Soln.Second > Maxy)
-            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_a);
-        int Righty = Soln.First;
-        if (Lefty > Righty)
-            swap(Lefty, Righty);
-        int Left = max(Leftx, Lefty);
-        int Right = min(Rightx, Righty);
+        int __Lefty = __Soln.__First;
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -(Maxy - __Soln.__Second) / __Num1);
+        if (__Soln.__Second > Maxy)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, sign_a);
+        int __Righty = __Soln.__First;
+        if (__Lefty > __Righty)
+            swap(__Lefty, __Righty);
+        int Left = max(__Leftx, __Lefty);
+        int Right = min(__Rightx, __Righty);
         if (Left > Right)
             return 0;
         return (Right - Left) / abs(__Num2) + 1;
     }
+
+    // int __MinSum()
 };
 
 void solve(void)
 {
     MATH obj;
     Triplet tr = obj.__AnySolution(68, 64, 128);
-    debug(tr.First, tr.Second, tr.Third);
+    debug(tr.__First, tr.__Second, tr.__Third);
     debug(obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2));
 }
 

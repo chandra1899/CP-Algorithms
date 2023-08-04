@@ -1,2 +1,3 @@
-Line:279 [tr.First, tr.Second, tr.Third] = [32, -32, 4]
-Line:280 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [
+Line:280 [obj.__BinExpItr(8, 14)] = [46480318]
+Line:282 [tr.__First, tr.__Second, tr.__Third] = [32, -32, 4]
+Line:283 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [4]
