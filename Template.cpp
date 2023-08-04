@@ -116,6 +116,19 @@ void _print(const Head &H, const Tail &...T)
 #define debug(...)
 #endif
 
+class Triplet
+{
+public:
+    int First = -1;
+    int Second = -1;
+    int Third = -1;
+    Triplet(int First, int Second, int Third)
+    {
+        this->First = First, this->Second = Second, this->Third = Third;
+    }
+    Triplet() {}
+};
+
 class MATH
 {
 public:
@@ -131,6 +144,7 @@ public:
             return ((__Res * __Res) % __Mod * __Base) % __Mod;
         return (__Res * __Res) % __Mod;
     }
+
     int __BinExpItr(int __Base, int __Pow, int __Mod = MOD)
     {
         int __Res = 1;
@@ -143,6 +157,7 @@ public:
         }
         return __Res;
     }
+
     int __Gcd(int __Num1, int __Num2)
     {
         // ^ Extended Euclid Algorithm __Gcd(__Num1 , __Num2) = __Gcd(__Num2 , __Num1 % __Num2).
@@ -150,11 +165,13 @@ public:
             return __Num1;
         return __Gcd(__Num2, __Num1 % __Num2);
     }
+
     int __Lcm(int __Num1, int __Num2)
     {
         // ^ Lcm And Hcf Property __Lcm * __Gcd = __Num1 * __Num2.
         return __Num1 / __Gcd(__Num1, __Num2) * __Num2;
     }
+
     int __FastGcd(int __Num1, int __Num2)
     {
         // ^ __Gcd(2 * __Num1 , 2 * __Num2) = 2 * __Gcd(__Num1 , __Num2) , Both Even.
@@ -173,25 +190,99 @@ public:
         } while (__Num2);
         return __Num1 << shift;
     }
+
     int __ExtendedGcd(int __Num1, int __Num2, int &x, int &y)
     {
-        // ^ 
+        // ^ If __Num1 * X + __Num2 * Y = __Gcd(__Num1 , __Num2) Then There Exist ,
+        // ^ __Num2 * X1 + (__Num1 % __Num2) * Y1 = __Gcd(__Num1 , __Num2) For Some X1 , Y1.
         if (__Num2 == 0)
         {
+            // ^ Base Case __Num1 * X + __Num2 * Y = __Gcd(__Num1 , __Num2).
             x = 1, y = 0;
             return __Num1;
         }
         int x1, y1;
         int __Gcd = __ExtendedGcd(__Num2, __Num1 % __Num2, x1, y1);
+        // ^ Applying the Base Case In the Backtracking Step.
         x = y1, y = x1 - y1 * (__Num1 / __Num2);
         return __Gcd;
+    }
+
+    Triplet __AnySolution(int __Num1, int __Num2, int __Const)
+    {
+        Triplet Soln;
+        // ^ Assuming The Eqn To be  __Num1 * X + __Num2 * Y = __Gcd(__Num1 , __Num2) Now ,
+        // ^ Now Extending The Same Across __Const With Multiples Of __Gcd.
+        Soln.Third = __ExtendedGcd(abs(__Num1), abs(__Num2), Soln.First, Soln.Second);
+        if (__Const % Soln.Third)
+            return {-1, -1, -1};
+        Soln.First *= __Const / Soln.Third, Soln.Second *= __Const / Soln.Third;
+        if (__Num1 < 0)
+            Soln.First = -Soln.First;
+        if (__Num2 < 0)
+            Soln.Second = -Soln.Second;
+        return Soln;
+    }
+
+    void __ShiftSoln(int &x, int &y, int a, int b, int cnt)
+    {
+        x += cnt * b;
+        y -= cnt * a;
+    }
+
+    int __AllSolutions(int __Num1, int __Num2, int __Const, int Minx, int Maxx, int Miny, int Maxy)
+    {
+        Triplet Soln;
+        Soln = __AnySolution(__Num1, __Num2, __Const);
+        if (Soln.First == -1 && Soln.Second == -1 && Soln.Third == -1)
+            return 0;
+        __Num1 /= Soln.Third;
+        __Num2 /= Soln.Third;
+
+        int sign_a = __Num1 > 0 ? +1 : -1;
+        int sign_b = __Num2 > 0 ? +1 : -1;
+
+        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Minx - Soln.First) / __Num2);
+        if (Soln.First < Minx)
+            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_b);
+        if (Soln.First > Maxx)
+            return 0;
+        int lx1 = Soln.First;
+
+        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Maxx - Soln.First) / __Num2);
+        if (Soln.First > Maxx)
+            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_b);
+        int rx1 = Soln.First;
+
+        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Miny - Soln.Second) / __Num1);
+        if (Soln.Second < Miny)
+            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_a);
+        if (Soln.Second > Maxy)
+            return 0;
+        int lx2 = Soln.First;
+
+        __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Maxy - Soln.Second) / __Num1);
+        if (Soln.Second > Maxy)
+            __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_a);
+        int rx2 = Soln.First;
+
+        if (lx2 > rx2)
+            swap(lx2, rx2);
+        int lx = max(lx1, lx2);
+        int rx = min(rx1, rx2);
+
+        if (lx > rx)
+            return 0;
+        return (rx - lx) / abs(__Num2) + 1;
     }
 };
 
 void solve(void)
 {
     MATH obj;
-    debug(obj.__FastGcd(32, 64));
+    Triplet tr = obj.__AnySolution(68, 64, 128);
+    debug(tr.First, tr.Second, tr.Third);
+    debug(obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2));
 }
 
 signed main(void)
