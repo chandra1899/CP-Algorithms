@@ -1,1 +1,2 @@
-Line:176 [obj.__FastGcd(32, 64)] = [32]
+Line:279 [tr.First, tr.Second, tr.Third] = [32, -32, 4]
+Line:280 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [

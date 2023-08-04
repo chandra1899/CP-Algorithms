@@ -224,56 +224,51 @@ public:
         return Soln;
     }
 
-    void __ShiftSoln(int &x, int &y, int a, int b, int cnt)
+    void __ShiftSoln(int &x, int &y, int __Num1, int __Num2, int cnt)
     {
-        x += cnt * b;
-        y -= cnt * a;
+        x += cnt * __Num2;
+        y -= cnt * __Num1;
     }
 
     int __AllSolutions(int __Num1, int __Num2, int __Const, int Minx, int Maxx, int Miny, int Maxy)
     {
+        // ^ Each Time We Can Get A New Solution By Transforming X and Y as ,
+        // ^ x1 = x + k * (__Num2/__Gcd) , y1 = y - k * (__Num1/__Gcd).
         Triplet Soln;
         Soln = __AnySolution(__Num1, __Num2, __Const);
         if (Soln.First == -1 && Soln.Second == -1 && Soln.Third == -1)
             return 0;
         __Num1 /= Soln.Third;
         __Num2 /= Soln.Third;
-
         int sign_a = __Num1 > 0 ? +1 : -1;
         int sign_b = __Num2 > 0 ? +1 : -1;
-
         __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Minx - Soln.First) / __Num2);
         if (Soln.First < Minx)
             __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_b);
         if (Soln.First > Maxx)
             return 0;
-        int lx1 = Soln.First;
-
+        int Leftx = Soln.First;
         __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, (Maxx - Soln.First) / __Num2);
         if (Soln.First > Maxx)
             __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_b);
-        int rx1 = Soln.First;
-
+        int Rightx = Soln.First;
         __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Miny - Soln.Second) / __Num1);
         if (Soln.Second < Miny)
             __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -sign_a);
         if (Soln.Second > Maxy)
             return 0;
-        int lx2 = Soln.First;
-
+        int Lefty = Soln.First;
         __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, -(Maxy - Soln.Second) / __Num1);
         if (Soln.Second > Maxy)
             __ShiftSoln(Soln.First, Soln.Second, __Num1, __Num2, sign_a);
-        int rx2 = Soln.First;
-
-        if (lx2 > rx2)
-            swap(lx2, rx2);
-        int lx = max(lx1, lx2);
-        int rx = min(rx1, rx2);
-
-        if (lx > rx)
+        int Righty = Soln.First;
+        if (Lefty > Righty)
+            swap(Lefty, Righty);
+        int Left = max(Leftx, Lefty);
+        int Right = min(Rightx, Righty);
+        if (Left > Right)
             return 0;
-        return (rx - lx) / abs(__Num2) + 1;
+        return (Right - Left) / abs(__Num2) + 1;
     }
 };
 
