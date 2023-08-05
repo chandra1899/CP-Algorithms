@@ -303,6 +303,7 @@ public:
         __Soln = __AnySolution(__Num1, __Num2, __Const);
         return (__Soln.__First + __Soln.__Second);
     }
+    
 };
 
 void solve(void)
