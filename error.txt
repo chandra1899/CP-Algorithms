@@ -1,3 +1,3 @@
-Line:280 [obj.__BinExpItr(8, 14)] = [46480318]
-Line:282 [tr.__First, tr.__Second, tr.__Third] = [32, -32, 4]
-Line:283 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [4]
+Line:312 [tr.__First, tr.__Second, tr.__Third] = [32, -32, 4]
+Line:313 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [4]
+Line:314 [obj.__MinSum(8, 4, 4)] = [1]

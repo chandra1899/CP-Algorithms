@@ -271,7 +271,38 @@ public:
         return (Right - Left) / abs(__Num2) + 1;
     }
 
-    // int __MinSum()
+    int __MinSum(int __Num1, int __Num2, int __Const)
+    {
+        /*
+        // ^ Minimum Value Of (x + y) Where x, y Are Non Negative Integers.
+        Triplet __Soln;
+        __Soln = __AnySolution(__Num1, __Num2, __Const);
+        if (__Soln.__First == -1 && __Soln.__Second == -1 && __Soln.__Third == -1)
+            return -1;
+        __Num1 /= __Soln.__Third;
+        __Num2 /= __Soln.__Third;
+        int sign_a = __Num1 > 0 ? +1 : -1;
+        int sign_b = __Num2 > 0 ? +1 : -1;
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -__Soln.__First / __Num2);
+        if (__Soln.__First < 0)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, sign_b);
+        int minx1 = __Soln.__First;
+        __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, __Soln.__Second / __Num1);
+        if (__Soln.__Second < 0)
+            __ShiftSoln(__Soln.__First, __Soln.__Second, __Num1, __Num2, -sign_a);
+        int minx2 = __Soln.__First;
+        if (minx2 > __Soln.__First)
+            swap(minx2, __Soln.__First);
+        int minx = max(minx1, minx2);
+        if (minx > __Soln.__First)
+            return -1;
+        int miny = (__Const - __Num1 * __Soln.__First) / __Num2;
+        return (miny + minx);
+        */
+        Triplet __Soln;
+        __Soln = __AnySolution(__Num1, __Num2, __Const);
+        return (__Soln.__First + __Soln.__Second);
+    }
 };
 
 void solve(void)
@@ -280,6 +311,7 @@ void solve(void)
     Triplet tr = obj.__AnySolution(68, 64, 128);
     debug(tr.__First, tr.__Second, tr.__Third);
     debug(obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2));
+    debug(obj.__MinSum(8, 4, 4));
 }
 
 signed main(void)
