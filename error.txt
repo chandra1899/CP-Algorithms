@@ -1,3 +1,2 @@
-Line:315 [tr.__First, tr.__Second, tr.__Third] = [32, -32, 4]
-Line:316 [obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2)] = [4]
-Line:317 [obj.__MinSum(-80, -40, 4)] = [-2147483648]
+Line:373 [obj.__FibonacciItr(1), obj.__FibonacciItr(2), obj.__FibonacciItr(3), obj.__FibonacciItr(4)] = [1, 1, 2, 3]
+Line:374 [obj.__FibExp(300), obj.__FibonacciItr(300)] = [644264086, 644264086]

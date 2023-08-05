@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 #define int long long
 using namespace std;
-#define MOD 1000000007
+#define __MOD 1000000007
+#define __Sz 2
 
 void __print(signed x)
 {
@@ -116,23 +117,40 @@ void _print(const Head &H, const Tail &...T)
 #define debug(...)
 #endif
 
-class Triplet
+class __Triplet
 {
 public:
     int __First = -1;
     int __Second = -1;
     int __Third = -1;
-    Triplet(int __First, int __Second, int __Third)
+    __Triplet(int __First, int __Second, int __Third)
     {
         this->__First = __First, this->__Second = __Second, this->__Third = __Third;
     }
-    Triplet() {}
+    __Triplet() {}
 };
 
-class MATH
+struct __Matrix
+{
+    long long __Mat[__Sz][__Sz];
+    __Matrix friend operator*(const __Matrix &__Mat1, const __Matrix &__Mat2)
+    {
+        __Matrix __Res;
+        for (int i = 0; i < __Sz; i++)
+            for (int j = 0; j < __Sz; j++)
+            {
+                __Res.__Mat[i][j] = 0;
+                for (int k = 0; k < __Sz; k++)
+                    __Res.__Mat[i][j] = (__Res.__Mat[i][j] + __Mat1.__Mat[i][k] * __Mat2.__Mat[k][j]) % __MOD;
+            }
+        return __Res;
+    }
+};
+
+class __MATH
 {
 public:
-    int __BinExpRec(int __Base, int __Pow, int __Mod = MOD)
+    int __BinExpRec(int __Base, int __Pow, int __Mod = __MOD)
     {
         // * APPLICATIONS :-
         // ^ Used To Calculate (__Base ^ __Pow) % __Mod in  O(logN) Time.
@@ -145,7 +163,7 @@ public:
         return (__Res * __Res) % __Mod;
     }
 
-    int __BinExpItr(int __Base, int __Pow, int __Mod = MOD)
+    int __BinExpItr(int __Base, int __Pow, int __Mod = __MOD)
     {
         int __Res = 1;
         while (__Pow)
@@ -154,6 +172,19 @@ public:
                 __Res = (__Res * __Base) % __Mod;
             __Base = (__Base * __Base) % __Mod;
             __Pow >>= 1;
+        }
+        return __Res;
+    }
+
+    __Matrix __MatExp(__Matrix __Base, int __Num)
+    {
+        __Matrix __Res = {{{1, 0}, {0, 1}}};
+        while (__Num)
+        {
+            if (__Num & 1)
+                __Res = __Res * __Base;
+            __Base = __Base * __Base;
+            __Num >>= 1;
         }
         return __Res;
     }
@@ -208,9 +239,9 @@ public:
         return __Gcd;
     }
 
-    Triplet __AnySolution(int __Num1, int __Num2, int __Const)
+    __Triplet __AnySolution(int __Num1, int __Num2, int __Const)
     {
-        Triplet __Soln;
+        __Triplet __Soln;
         // ^ Assuming The Eqn To be  __Num1 * X + __Num2 * Y = __Gcd(__Num1 , __Num2) Now ,
         // ^ Now Extending The Same Across __Const With Multiples Of __Gcd.
         __Soln.__Third = __ExtendedGcd(abs(__Num1), abs(__Num2), __Soln.__First, __Soln.__Second);
@@ -226,6 +257,7 @@ public:
 
     void __ShiftSoln(int &x, int &y, int __Num1, int __Num2, int __cnt)
     {
+        // ^ This Get The Min possible Value of X and Y by Shifting the Values Correspondingly.
         x += __cnt * __Num2;
         y -= __cnt * __Num1;
     }
@@ -234,7 +266,7 @@ public:
     {
         // ^ Each Time We Can Get A New Solution By Transforming X and Y as ,
         // ^ x1 = x + k * (__Num2/__Gcd) , y1 = y - k * (__Num1/__Gcd).
-        Triplet __Soln;
+        __Triplet __Soln;
         __Soln = __AnySolution(__Num1, __Num2, __Const);
         if (__Soln.__First == -1 && __Soln.__Second == -1 && __Soln.__Third == -1)
             return 0;
@@ -275,7 +307,7 @@ public:
     {
         /*
         // ^ Minimum Value Of (x + y) Where x, y Are Non Negative Integers.
-        Triplet __Soln;
+        __Triplet __Soln;
         __Soln = __AnySolution(__Num1, __Num2, __Const);
         if (__Soln.__First == -1 && __Soln.__Second == -1 && __Soln.__Third == -1)
             return -1;
@@ -299,22 +331,48 @@ public:
         int miny = (__Const - __Num1 * __Soln.__First) / __Num2;
         return (miny + minx);
         */
-        Triplet __Soln;
+        // ^ The Base Solution of __AnySolution Will Always Give the Minimum Sum of X + Y.
+        __Triplet __Soln;
         __Soln = __AnySolution(__Num1, __Num2, __Const);
         if (__Soln.__First != -1 && __Soln.__Second != -1 && __Soln.__Third != -1)
             return (__Soln.__First + __Soln.__Second);
         else
             return INT_MIN;
     }
+
+    int __FibonacciFormula(int __Num)
+    {
+        // ^ Formula of Fib(n) = (((1 + sqrt(5))/2)^__Num - ((1 - sqrt(5))/2)^__Num)/sqrt(5).
+        return ((1 / sqrt(5)) * (pow((1 + sqrt(5)) / 2.0, __Num) - pow((1 - sqrt(5)) / 2.0, __Num)));
+    }
+    int __FibonacciItr(int __Num, int __Mod = __MOD)
+    {
+        // ^ Fib(n) = Fib(n-1) + Fib(n-2).
+        if (__Num == 0)
+            return 0;
+        if (__Num == 1)
+            return 1;
+        int __Prev = 0;
+        int __Curr = 1;
+        for (int i = 2; i <= __Num; i++)
+        {
+            swap(__Prev, __Curr);
+            __Curr = (__Prev + __Curr) % __MOD;
+        }
+        return __Curr;
+    }
+    long long __FibExp(int n)
+    {
+        __Matrix __Base = {{{1, 1}, {1, 0}}};
+        return __MatExp(__Base, n).__Mat[0][1];
+    }
 };
 
 void solve(void)
 {
-    MATH obj;
-    Triplet tr = obj.__AnySolution(68, 64, 128);
-    debug(tr.__First, tr.__Second, tr.__Third);
-    debug(obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2));
-    debug(obj.__MinSum(-80, -40, 4));
+    __MATH obj;
+    debug(obj.__FibonacciItr(1), obj.__FibonacciItr(2), obj.__FibonacciItr(3), obj.__FibonacciItr(4));
+    debug(obj.__FibExp(300), obj.__FibonacciItr(300));
 }
 
 signed main(void)
