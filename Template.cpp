@@ -301,9 +301,11 @@ public:
         */
         Triplet __Soln;
         __Soln = __AnySolution(__Num1, __Num2, __Const);
-        return (__Soln.__First + __Soln.__Second);
+        if (__Soln.__First != -1 && __Soln.__Second != -1 && __Soln.__Third != -1)
+            return (__Soln.__First + __Soln.__Second);
+        else
+            return INT_MIN;
     }
-    
 };
 
 void solve(void)
@@ -312,7 +314,7 @@ void solve(void)
     Triplet tr = obj.__AnySolution(68, 64, 128);
     debug(tr.__First, tr.__Second, tr.__Third);
     debug(obj.__AllSolutions(2, 4, 2, -4, 4, -2, 2));
-    debug(obj.__MinSum(8, 4, 4));
+    debug(obj.__MinSum(-80, -40, 4));
 }
 
 signed main(void)
